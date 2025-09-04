@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulario con estilos (HTML + CSS)</title>
+  <style>
+    :root{
+      --bg: #0f172a;          /* slate-900 */
+      --card: #111827;        /* gray-900 */
+      --muted: #94a3b8;       /* slate-400 */
+      --text: #e2e8f0;        /* slate-200 */
+      --primary: #22d3ee;     /* cyan-400 */
+      --primary-dark: #0891b2;/* cyan-700 */
+      --ring: rgba(34,211,238,.35);
+      --error: #ef4444;       /* red-500 */
+      --ok: #10b981;          /* emerald-500 */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% 10%, #0b1229 0%, var(--bg) 40%, #0b1229 100%);
+      color:var(--text);
+      display:grid; place-items:center; padding:24px;
+    }
+    .card{
+      width:min(920px, 95vw);
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px; padding:28px; box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+      backdrop-filter: blur(6px);
+    }
+    h1{margin:0 0 8px; font-size:clamp(22px, 2.8vw, 34px)}
+    p.lead{margin-top:0; color:var(--muted)}
+
+    form{margin-top:18px}
+    .grid{display:grid; gap:16px}
+    @media (min-width: 760px){
+      .grid{grid-template-columns: repeat(2, 1fr)}
+      .span-2{grid-column: span 2}
+    }
+
+    label{display:block; font-size:14px; color:var(--muted); margin:2px 2px 8px}
+    .req{color:var(--primary)}
+
+    .field{position:relative}
+    input, select, textarea{
+      width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.12);
+      background:#0b1222; color:var(--text); outline:none; font-size:16px;
+      transition: box-shadow .2s ease, border-color .2s ease, transform .05s ease;
+    }
+    input::placeholder{color:#6b7280}
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--primary); box-shadow: 0 0 0 6px var(--ring);
+    }
+    input:invalid[required]{border-color: rgba(239,68,68,.7)}
+    .hint{font-size:12px; color:#9aa7bd; margin-top:6px}
+    .error{display:none; font-size:12px; color:var(--error); margin-top:6px}
+
+    /* Estilos para range */
+    input[type="range"]{padding:0; height:34px}
+
+    /* Botones */
+    .actions{display:flex; gap:12px; margin-top:8px; flex-wrap:wrap}
+    button{
+      appearance:none; border:none; padding:12px 18px; border-radius:14px; cursor:pointer; font-weight:600;
+      background:linear-gradient(180deg, var(--primary), #38bdf8);
+      color:#00121a; box-shadow: 0 10px 24px rgba(34,211,238,.25);
+    }
+    button:hover{transform: translateY(-1px)}
+    button:active{transform: translateY(0)}
+    .ghost{background: transparent; color: var(--text); border:1px solid rgba(255,255,255,0.18)}
+    .footer{margin-top:14px; color:var(--muted); font-size:12px}
+
+    /* Estado visual válido */
+    input:required:valid{border-color: rgba(16,185,129,.7)}
+  </style>
+</head>
+<body>
+  <section class="card" role="region" aria-labelledby="title">
+    <h1 id="title">Registro a Taller de Redes</h1>
+    <p class="lead">Demostración de <strong>atributos de <code>&lt;input&gt;</code></strong> con validaciones HTML5 y estilos modernos.</p>
+
+    <!-- Nota: Este formulario muestra más de 5 atributos útiles de input: type, required, placeholder, minlength, maxlength, pattern, min, max, step, autocomplete, accept, multiple, disabled, readonly, value. -->
+
+    <form id="mi-formulario" action="#" method="post" novalidate>
+      <div class="grid">
+        <!-- NOMBRE: required, minlength, maxlength, placeholder, autocomplete -->
+        <div class="field">
+          <label for="nombre">Nombre completo <span class="req" title="requerido">*</span></label>
+          <input id="nombre" name="nombre" type="text" placeholder="Ej.: Roberto Morales" required minlength="3" maxlength="60" autocomplete="name" />
+          <div class="hint">Entre 3 y 60 caracteres.</div>
+        </div>
+
+        <!-- EMAIL: required, type=email, placeholder, autocomplete -->
+        <div class="field">
+          <label for="email">Correo electrónico <span class="req">*</span></label>
+          <input id="email" name="email" type="email" placeholder="tucorreo@dominio.com" required autocomplete="email" />
+          <div class="hint">Usa un correo válido (se enviará confirmación).</div>
+        </div>
+
+        <!-- CONTRASEÑA: required, minlength, maxlength, pattern, title, autocomplete -->
+        <div class="field">
+          <label for="pass">Contraseña <span class="req">*</span></label>
+          <input id="pass" name="pass" type="password"
+                 placeholder="Mín. 8 caracteres" required minlength="8" maxlength="32"
+                 pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}"
+                 title="Debe incluir al menos 1 mayúscula, 1 minúscula y 1 número."
+                 autocomplete="new-password" />
+          <div class="hint">Incluye mayúscula, minúscula y número. Máx. 32.</div>
+        </div>
+
+        <!-- EDAD: type=number, min, max, step, required -->
+        <div class="field">
+          <label for="edad">Edad <span class="req">*</span></label>
+          <input id="edad" name="edad" type="number" required min="16" max="99" step="1" placeholder="Ej.: 20" />
+          <div class="hint">Entre 16 y 99 años.</div>
+        </div>
+
+        <!-- TELEFONO: type=tel, pattern, placeholder, title -->
+        <div class="field">
+          <label for="tel">Teléfono celular (EC) <span class="req">*</span></label>
+          <input id="tel" name="tel" type="tel" required placeholder="09xxxxxxxx"
+                 pattern="^0?9\d{8}$" title="Formato válido: 09 seguido de 8 dígitos." autocomplete="tel" />
+          <div class="hint">Ej.: 0991234567</div>
+        </div>
+
+        <!-- FECHA: type=date, min, max -->
+        <div class="field">
+          <label for="fecha">Fecha del taller <span class="req">*</span></label>
+          <input id="fecha" name="fecha" type="date" required min="2025-01-01" max="2030-12-31" />
+          <div class="hint">Rango permitido: 2025–2030.</div>
+        </div>
+
+        <!-- URL: type=url, placeholder -->
+        <div class="field span-2">
+          <label for="web">Sitio web (opcional)</label>
+          <input id="web" name="web" type="url" placeholder="https://tu-portafolio.com" autocomplete="url" />
+          <div class="hint">Pega un enlace válido con http(s).</div>
+        </div>
+
+        <!-- FILE: type=file, accept, multiple -->
+        <div class="field">
+          <label for="cv">Sube tu CV (PDF/DOCX)</label>
+          <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx" />
+          <div class="hint">Formatos permitidos: .pdf, .doc, .docx</div>
+        </div>
+
+        <!-- RANGE: type=range, min, max, step, value + datalist -->
+        <div class="field">
+          <label for="nivel">Nivel de conocimiento (1–10)</label>
+          <input id="nivel" name="nivel" type="range" min="1" max="10" step="1" value="5" list="ticks" />
+          <datalist id="ticks">
+            <option value="1"></option>
+            <option value="5"></option>
+            <option value="10"></option>
+          </datalist>
+          <div class="hint">Arrastra el control para indicar tu nivel.</div>
+        </div>
+
+        <!-- CHECKBOX: required -->
+        <div class="field span-2">
+          <label class="checkbox">
+            <input id="tyc" name="tyc" type="checkbox" required />
+            Acepto los términos y condiciones
+          </label>
+          <div class="hint">Este campo es obligatorio para enviar.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" id="enviar">Enviar formulario</button>
+        <button type="reset" class="ghost">Limpiar</button>
+      </div>
+      <p class="footer">Ejemplo educativo: usa validaciones nativas del navegador sin librerías externas.</p>
+    </form>
+  </section>
+
+  <script>
+    // Validación ligera: mostrar mensajes personalizados si hay errores al enviar
+    const form = document.getElementById('mi-formulario');
+    form.addEventListener('submit', (e) => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        // Forzar estilos :invalid y enfocar el primer campo inválido
+        const firstInvalid = form.querySelector(':invalid');
+        firstInvalid?.focus();
+      }
+    });
+
+    // Mostrar/ocultar errores en tiempo real (opcional)
+    form.querySelectorAll('input[required]').forEach((el)=>{
+      el.addEventListener('input', () => {
+        el.setCustomValidity(''); // limpia errores previos
+        if (!el.checkValidity()) {
+          // Puedes personalizar mensajes por tipo
+          if (el.validity.valueMissing) el.setCustomValidity('Este campo es obligatorio.');
+          else if (el.validity.tooShort) el.setCustomValidity(`Mínimo ${el.getAttribute('minlength')} caracteres.`);
+          else if (el.validity.tooLong) el.setCustomValidity(`Máximo ${el.getAttribute('maxlength')} caracteres.`);
+          else if (el.validity.typeMismatch) el.setCustomValidity('Formato no válido.');
+          else if (el.validity.rangeUnderflow || el.validity.rangeOverflow) el.setCustomValidity('Valor fuera de rango.');
+          else if (el.validity.patternMismatch) el.setCustomValidity('Formato incorrecto. Revisa el ejemplo.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
